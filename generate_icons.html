@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Extension Icons</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+    canvas { border: 1px solid #ccc; margin-right: 10px; background: #f0f0f0; }
+    .container { display: flex; flex-direction: column; gap: 20px; }
+    .row { display: flex; align-items: flex-end; gap: 10px; }
+    button { padding: 10px 20px; cursor: pointer; background: #4f46e5; color: white; border: none; border-radius: 5px; }
+    .instructions { background: #eef2ff; padding: 15px; border-radius: 8px; border-left: 4px solid #4f46e5; }
+  </style>
+</head>
+<body>
+  <h1>Tab Masker Pro 图标生成器</h1>
+  <div class="instructions">
+    <p>由于我无法直接创建二进制图片文件，请在浏览器中打开此文件，点击下方按钮下载生成的图标，并将其放入项目的 <code>icons/</code> 文件夹中。</p>
+    <p>文件名应分别为：<code>icon16.png</code>, <code>icon48.png</code>, <code>icon128.png</code>。</p>
+  </div>
+
+  <div class="container">
+    <div class="style-selector">
+      <label>选择图标风格：</label>
+      <select id="iconStyle" onchange="redrawAll()">
+        <option value="modern">现代紫色 (默认)</option>
+        <option value="teams">Microsoft Teams 风格 (商务蓝)</option>
+      </select>
+    </div>
+    <div class="row">
+      <div>
+        <canvas id="canvas16" width="16" height="16"></canvas>
+        <p>16x16</p>
+      </div>
+      <div>
+        <canvas id="canvas48" width="48" height="48"></canvas>
+        <p>48x48</p>
+      </div>
+      <div>
+        <canvas id="canvas128" width="128" height="128"></canvas>
+        <p>128x128</p>
+      </div>
+    </div>
+    <button onclick="downloadAll()">一键生成并下载所有图标</button>
+  </div>
+
+  <script>
+    function drawIcon(canvasId, size, style) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, size, size);
+      
+      let color1, color2;
+      if (style === 'teams') {
+        color1 = '#5059c9'; // Teams Blue
+        color2 = '#464eb8';
+      } else {
+        color1 = '#6366f1'; // Modern Purple
+        color2 = '#4f46e5';
+      }
+
+      // 背景 - 渐变圆角矩形
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, color1);
+      gradient.addColorStop(1, color2);
+      
+      ctx.fillStyle = gradient;
+      const radius = size * 0.2;
+      ctx.beginPath();
+      ctx.moveTo(radius, 0);
+      ctx.lineTo(size - radius, 0);
+      ctx.quadraticCurveTo(size, 0, size, radius);
+      ctx.lineTo(size, size - radius);
+      ctx.quadraticCurveTo(size, size, size - radius, size);
+      ctx.lineTo(radius, size);
+      ctx.quadraticCurveTo(0, size, 0, size - radius);
+      ctx.lineTo(0, radius);
+      ctx.quadraticCurveTo(0, 0, radius, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      // 图标文字 "T"
+      ctx.fillStyle = 'white';
+      ctx.font = `bold ${Math.floor(size * 0.7)}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('T', size / 2, size / 2 + size * 0.05);
+    }
+
+    function redrawAll() {
+      const style = document.getElementById('iconStyle').value;
+      drawIcon('canvas16', 16, style);
+      drawIcon('canvas48', 48, style);
+      drawIcon('canvas128', 128, style);
+    }
+
+    function downloadCanvas(canvasId, filename) {
+      const canvas = document.getElementById(canvasId);
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function downloadAll() {
+      downloadCanvas('canvas16', 'icon16.png');
+      downloadCanvas('canvas48', 'icon48.png');
+      downloadCanvas('canvas128', 'icon128.png');
+    }
+
+    // 初始化绘制
+    redrawAll();
+  </script>
+</body>
+</html>
