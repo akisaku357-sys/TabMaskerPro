@@ -51,42 +51,7 @@
 
 ---
 
-## 6. 发布流程指南 (Publishing Guide)
 
-### 第一步：准备资源
-1. 使用 `generate_icons.html` 生成并下载 16, 48, 128 尺寸的图标。
-2. 将下载的图片放入项目根目录下的 `icons/` 文件夹中。
-
-### 第二步：打包插件
-1. 选中项目中的所有核心文件：`manifest.json`, `popup.html`, `popup.js`, `content.js`, 以及 `icons/` 文件夹。
-2. 将它们压缩成一个 `.zip` 文件（注意：不要包含 `generate_icons.html` 和本说明文档）。
-
-### 第三步：上传至 Chrome Web Store
-1. 访问 [Chrome 应用商店开发者控制台](https://chrome.google.com/webstore/devconsole/)。
-2. 支付 5 美元的开发者注册费用（仅需支付一次）。
-3. 点击“添加新内容”，上传您准备好的 `.zip` 文件。
-4. 填写本说明文档中的“基本信息”和“详细说明”。
-5. 上传预览截图（建议使用 Microsoft Teams 风格的伪装效果截图）。
-6. 提交审核。审核通常需要 1-3 个工作日。
-
----
-
-## 7. 权限审核申诉说明 (Permission Justification)
-
-如果在提交审核时遇到“权限过于宽泛”的提示，请在开发者控制台的 **“权限使用说明” (Permission Justification)** 栏目中填写以下内容：
-
-> **中文说明：**
-> 该扩展的核心功能是允许用户自定义任何网页的标签标题和图标，以保护用户在公共或办公环境下的浏览隐私。由于用户可能需要伪装任何特定的域名（如社交媒体、视频网站等），我们无法预先确定匹配的域名列表。因此，我们需要 `<all_urls>` 权限来根据用户在本地设置的关键词，在匹配的页面上动态注入伪装逻辑。
->
-> **English Justification:**
-> The core functionality of this extension is to allow users to customize tab titles and icons for any website to protect their browsing privacy in public or office environments. Since users may need to mask any specific domain (e.g., social media, video sites, etc.) based on their personal needs, we cannot pre-define a list of matched domains. Therefore, we require the `<all_urls>` permission to dynamically inject masking logic on pages that match the keywords configured by the user locally.
-
----
-
-## 8. 隐私合规声明 (Privacy Compliance)
-- 本插件不收集、不存储、不上传任何用户的浏览数据。
-- 所有的伪装配置仅存储在用户本地的 `chrome.storage.local` 中。
-- 仅在用户匹配的域名下执行简单的 DOM 操作（修改 `document.title` 和 `favicon` 链接）。
 
 ---
 
